@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.23)
 
-project(Pace26)
+project(NeckarCut)
 
 
-add_library(myDataStructure STATIC)
-target_sources(myDataStructure
+add_library(NeckarCutDataStructure STATIC)
+target_sources(NeckarCutDataStructure
     PRIVATE
         impl/objectPool.cc
         impl/myTree.cc
@@ -20,41 +20,40 @@ target_sources(myDataStructure
             src/global.hh
             src/macros.hh
 )
-target_compile_options(myDataStructure
+target_compile_options(NeckarCutDataStructure
     PRIVATE
         -O3
         -flto
+        -march=native
 )
 
-target_include_directories(myDataStructure
+target_include_directories(NeckarCutDataStructure
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 
-add_executable(mySolution)
-target_sources(mySolution
+add_executable(NeckarCut)
+target_sources(NeckarCut
     PRIVATE
-        mySolution.cc
+        NeckarCut.cpp
 )
-target_compile_options(mySolution
+target_compile_options(NeckarCut
     PRIVATE
         -O3
         -flto
+        -march=native
 )
 
-target_link_options(mySolution PRIVATE
+target_link_options(NeckarCut PRIVATE
     -static
     -flto
 )
 
-target_link_libraries(mySolution
+target_link_libraries(NeckarCut
     PRIVATE
-        myDataStructure
+        NeckarCutDataStructure
 )
-
-
-
 
 
 

@@ -1,133 +1,53 @@
-# NeckarCut - PACE 2026 Submission Guide
+# Maximum Agreement Forest - Exact Solver
 
+This repository contains an exact Branch-and-Bound solver for the **Maximum Agreement Forest (MAF)** problem on multiple rooted phylogenetic trees. It was developed for the Exact Track of the **PACE 2026 Challenge**.
 
-This repository contains the source code for the executable
+The solver determines the minimum number of edge cuts required to decompose a set of input trees into a common subforest (the agreement forest).
 
-`mySolution` developed for the PACE 2026 challenge. The project
+## Prerequisites
 
-implements optimized algorithms using customized internal data
+To compile the solver, ensure you have the following installed on your system:
+* A modern C++ compiler (e.g., GCC or Clang)
+* CMake (version 3.23 or higher)
+* Make (or another compatible build system)
 
-structures (such as `myForest`, `myTree`, and an aligned `ObjectPool`)
+## Installation Guide
 
-and is optimized for high-performance execution.
+We provide a simple setup script to build the project in an isolated `build/` directory using CMake.
 
+1. Clone or navigate to the repository directory.
+2. Ensure the setup script is executable:
+   ```bash
+   chmod +x setup.sh
+   ```
+3. Run the setup script to build the project in Release mode:
+   ```bash
+   ./setup.sh
+   ```
 
----
+This script will automatically create a `build` directory, configure the CMake project for optimal performance (`-O3 -flto`), and compile the final executable binary.
 
+## How to Use
 
-## 1. External Dependencies
+The binary reads instances from the **standard input** (`stdin`) and prints the result to the **standard output** (`stdout`).
 
+### Input Format
+The solver expects the standard PACE 2026 MAF format. It starts with a descriptor line indicating the number of trees and leaves:
+```text
+# p <number_of_trees> <number_of_leaves>
+```
+Followed by the individual phylogenetic trees represented as strings (Newick-like format).
 
+### Running the Solver
 
-To maximize performance and compatibility across target test
+Once the project is successfully built, you can run the solver by piping an input instance file into the binary. 
 
-environments, this project has been designed to be fully standalone. It
-
-relies strictly on standard language compliance and build tools.
-
-
-### Required Software
-
-* **CMake**: Version 3.23 or higher.
-
-
-* **C++ Compiler**: A modern compiler supporting standard C++20
-
-conventions (e.g., `GCC` >= 11 or `Clang` >= 13). This is required
-
-to support advanced syntax features, compiler-level standard
-
-optimizations, and custom memory constraints (e.g.,
-
-`std::aligned_alloc`).
-
-* **Standard Library**: `libstdc++` or `libc++` providing base functionality.
-
-
-### External Libraries
-
-
-* **No External Dependencies**: The project **does not require** any
-
-external third-party libraries (such as Boost, GMP, LEDA, or native
-
-multi-threading extensions).
-
-
-* All essential memory management structures (`ObjectPool`), linear
-
-buffers (`Array`), queuing primitives (`Queue`), and domain-specific
-
-graph primitives (`Forest`, `Tree`) are completely self-contained within
-
-this repository.
-
-
----
-
-
-## 2. Compilation and Installation
-
-
-
-The build system utilizes CMake to configure, optimize, and generate a
-
-static binary. Follow these operations sequentially from the repository
-
-root directory to build the executable:
-
-
-### Step 1: Create a Build Directory
-
-An out-of-source build is highly recommended to isolate build artifacts from the source files:
+For example, to run an instance located at `pace26_exact_pub/instance.txt`:
 
 ```bash
-mkdir build
-cd build
+cat pace26_exact_pub/instance.txt | ./build/mySolution
 ```
-
-### Step 2: Configure the Project
-
-Run CMake to discover the environment toolchain and prepare the build configuration. By default, the CMakeLists.txt configures high-level compiler optimization targets (-O3, -flto) and forces static execution linkage (-static).
-
+or alternatively using input redirection:
 ```bash
-cmake -DCMAKE_BUILD_TYPE=Release ..
+./build/mySolution < pace26_exact_pub/instance.txt
 ```
-
-### Step 3: Compile the Executable
-
-Build the binaries using CMake's build interface:
-
-```bash
-cmake --build . --config Release
-```
-
-Alternatively, for faster parallel compilation leveraging multiple CPU cores, you can use standard make:
-
-```bash
-make -j$(nproc)
-```
-
-Upon successful compilation, the standalone static binary mySolution will be generated inside the build directory.
-
-
-## 3. Running the Executable
-
-The binary follows the official PACE specifications for input/output processing. It reads problem instances directly from standard input (stdin) and prints the solution out to standard output (stdout).
-
-```bash
-./mySolution < path/to/input_instance.txt
-```
-
-
-Verifying the Static Linkage
-
-To verify that the binary was compiled entirely statically and contains no dynamically shared runtime library requirements (as required by the submission environments), run:
-
-```bash
-ldd mySolution
-```
-
-Expected Output:
-
-not a dynamic executable 
